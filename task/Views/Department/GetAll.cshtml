@@ -1,0 +1,67 @@
+﻿@model IEnumerable<task.ViewModels.DepartmentVM>
+
+@{
+    ViewData["Title"] = "Departments List";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Departments Overview</h2>
+
+    <table class="table table-hover table-striped shadow-sm rounded">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Manager</th>
+                <th>Students Count</th>
+                <th>Instructors Count</th>
+                <th>Students</th>
+                <th>Instructors</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dep in Model)
+            {
+                <tr>
+                    <td class="fw-bold">@dep.Name</td>
+                    <td>@dep.Manager</td>
+                    <td>
+                        <span class="badge bg-primary">@dep.StdCount</span>
+                    </td>
+                    <td>
+                        <span class="badge bg-success">@dep.InsCount</span>
+                    </td>
+                    <td>
+                        @if (dep.StdNames.Any())
+                        {
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var std in dep.StdNames)
+                                {
+                                    <li> @std</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Students</span>
+                        }
+                    </td>
+                    <td>
+                        @if (dep.InsNames.Any())
+                        {
+                            <ul class="list-unstyled mb-0">
+                                @foreach (var ins in dep.InsNames)
+                                {
+                                    <li> @ins</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Instructors</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

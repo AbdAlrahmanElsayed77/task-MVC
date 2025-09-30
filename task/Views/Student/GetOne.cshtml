@@ -1,0 +1,12 @@
+﻿@model task.Models.Student
+<div class="card" style="width:18rem;">
+    <img class="card-img-top" src="~/images/@Model.Image" alt="Student image" />
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text">
+            <b>SSN:</b> @Model.Ssn <br />
+            <b>Age:</b> @Model.Age <br />
+            <b>Address:</b> @Model.Address
+        </p>
+    </div>
+</div>

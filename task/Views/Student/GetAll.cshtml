@@ -1,0 +1,33 @@
+﻿@model IEnumerable<task.Models.Student>
+
+<h2>All Students</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>SSN</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Address</th>
+            <th>Image</th>
+            <th>Actions</th> 
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Ssn</td>
+                <td>@s.Name</td>
+                <td>@s.Age</td>
+                <td>@s.Address</td>
+                <td>
+                    <img src="~/images/@s.Image" width="80" height="80" />
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@s.Ssn" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@s.Ssn" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
