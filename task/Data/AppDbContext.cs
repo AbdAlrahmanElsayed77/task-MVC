@@ -34,11 +34,7 @@ namespace task.Data
                 .HasForeignKey(s => s.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Course>()
-                .HasOne(c => c.Department)
-                .WithMany(d => d.Courses)
-                .HasForeignKey(c => c.DepartmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+     
 
             modelBuilder.Entity<Enrollment>()
                 .HasOne(e => e.Student)

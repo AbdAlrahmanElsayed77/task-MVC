@@ -19,7 +19,7 @@ namespace task.Controllers
         public IActionResult Index()
         {
             var courses = _context.Courses
-                .Include(c => c.Department)
+           
                 .ToList();
             return View(courses);
         }
@@ -27,7 +27,7 @@ namespace task.Controllers
         public IActionResult Details(int id)
         {
             var course = _context.Courses
-                .Include(c => c.Department)
+       
                 .Include(c => c.Enrollments)
                     .ThenInclude(e => e.Student)
                 .Include(c => c.Teaches)
@@ -62,7 +62,7 @@ namespace task.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name", course.DepartmentId);
+            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
             return View(course);
         }
 
@@ -72,7 +72,7 @@ namespace task.Controllers
             var course = _context.Courses.Find(id);
             if (course == null) return NotFound();
 
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name", course.DepartmentId);
+            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
             return View(course);
         }
 
@@ -93,7 +93,7 @@ namespace task.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name", course.DepartmentId);
+            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
             return View(course);
         }
 
@@ -101,7 +101,6 @@ namespace task.Controllers
         public IActionResult Delete(int id)
         {
             var course = _context.Courses
-                .Include(c => c.Department)
                 .FirstOrDefault(c => c.Num == id);
             if (course == null) return NotFound();
             return View(course);

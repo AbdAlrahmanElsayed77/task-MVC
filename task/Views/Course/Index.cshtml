@@ -15,7 +15,6 @@
             <th>Topic</th>
             <th>Degree</th>
             <th>MinDegree</th>
-            <th>Department</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -28,7 +27,6 @@
                 <td>@c.Topic</td>
                 <td>@c.Degree</td>
                 <td>@c.MinDegree</td>
-                <td>@c.Department?.Name</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@c.Num" class="btn btn-info btn-sm">Details</a>
                     <a asp-action="Edit" asp-route-id="@c.Num" class="btn btn-warning btn-sm">Edit</a>

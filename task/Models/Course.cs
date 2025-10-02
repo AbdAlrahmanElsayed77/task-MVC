@@ -23,10 +23,6 @@ namespace task.Models
         [Range(0, 100)]
         public int MinDegree { get; set; }      
 
-    
-        public int DepartmentId { get; set; }
-        public Department Department { get; set; }
-
       
         public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
         public ICollection<Teaches> Teaches { get; set; } = new List<Teaches>();
