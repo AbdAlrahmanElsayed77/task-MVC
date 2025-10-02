@@ -1,0 +1,13 @@
+﻿
+
+<h2 class="mb-3">Add Course</h2>
+@* @await Html.PartialAsync("_CourseFormPartial", Model) *@
+<form asp-action="Add" method="post">
+    <partial name="_CourseFormPartial" />
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

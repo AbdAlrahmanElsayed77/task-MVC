@@ -1,4 +1,6 @@
-﻿namespace task.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace task.Models
 {
     public class Enrollment
     {
@@ -8,6 +10,7 @@
         public int CourseId { get; set; }
         public Course Course { get; set; }
 
-        public string Grade { get; set; }
+        [Range(0, 100)]
+        public int Score { get; set; }  
     }
 }

@@ -22,25 +22,23 @@ namespace task.Data
                 .HasKey(e => new { e.StudentId, e.CourseId });
 
             modelBuilder.Entity<Teaches>()
-        .HasKey(t => new { t.InstructorId, t.CourseId });
-
-            modelBuilder.Entity<Student>()
-       .HasOne(s => s.Department)
-       .WithMany(d => d.Students)
-       .HasForeignKey(s => s.DepartmentId)
-       .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Instructor>()
-        .HasOne(i => i.Department)
-        .WithMany(d => d.Instructors)
-        .HasForeignKey(i => i.DepartmentId)
-        .OnDelete(DeleteBehavior.Restrict);
+                .HasKey(t => new { t.InstructorId, t.CourseId });
 
             modelBuilder.Entity<Course>()
-        .HasOne(c => c.Department)
-        .WithMany(d => d.Courses)
-        .HasForeignKey(c => c.DepartmentId)
-        .OnDelete(DeleteBehavior.Restrict);
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Student>()
+                .HasOne(s => s.Department)
+                .WithMany(d => d.Students)
+                .HasForeignKey(s => s.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Department)
+                .WithMany(d => d.Courses)
+                .HasForeignKey(c => c.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Enrollment>()
                 .HasOne(e => e.Student)
@@ -53,18 +51,17 @@ namespace task.Data
                 .HasForeignKey(e => e.CourseId);
 
             modelBuilder.Entity<Teaches>()
-        .HasOne(t => t.Instructor)
-        .WithMany(i => i.Teaches)
-        .HasForeignKey(t => t.InstructorId)
-        .OnDelete(DeleteBehavior.Restrict);
-
+                .HasOne(t => t.Instructor)
+                .WithMany(i => i.Teaches)
+                .HasForeignKey(t => t.InstructorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Teaches>()
-        .HasOne(t => t.Course)
-        .WithMany(c => c.Teaches)
-        .HasForeignKey(t => t.CourseId)
-        .OnDelete(DeleteBehavior.Restrict);
-
+                .HasOne(t => t.Course)
+                .WithMany(c => c.Teaches)
+                .HasForeignKey(t => t.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }

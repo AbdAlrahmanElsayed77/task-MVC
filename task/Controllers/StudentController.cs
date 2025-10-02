@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using task.Data;
 using task.Models;
 
@@ -32,6 +33,18 @@ namespace task.Controllers
         {
             return View();
         }
+        public IActionResult Details(int id)
+        {
+            var student = _context.Students
+                .Include(s => s.Department)
+                .Include(s => s.Enrollments)
+                    .ThenInclude(e => e.Course)
+                .FirstOrDefault(s => s.Ssn == id);
+
+            if (student == null) return NotFound();
+            return View(student);
+        }
+
 
         [HttpPost]
         public IActionResult Add(Student student)
@@ -59,6 +72,7 @@ namespace task.Controllers
             if (existingStudent == null) return NotFound();
             existingStudent.Name = student.Name;
             existingStudent.Age = student.Age;
+            existingStudent.Address = student.Address;
             _context.SaveChanges();
             return RedirectToAction("GetAll");
         }

@@ -1,0 +1,34 @@
+﻿@model task.Models.Course
+@{
+    Layout = "_Layout";
+}
+<h2>@Model.Name — Details</h2>
+
+<p><strong>Topic:</strong> @Model.Topic</p>
+<p><strong>Degree:</strong> @Model.Degree</p>
+<p><strong>Min Degree:</strong> @Model.MinDegree</p>
+<p><strong>Department:</strong> @Model.Department?.Name</p>
+
+<h4 class="mt-4">Enrolled Students</h4>
+@if (!Model.Enrollments.Any())
+{
+    <p>No students enrolled.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr><th>Student</th><th>Score</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model.Enrollments)
+            {
+                var passed = e.Score >= Model.MinDegree;
+                <tr>
+                    <td>@e.Student?.Name</td>
+                    <td style="color:@(passed ? "green" : "red")">@e.Score</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
