@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using task.Data;
+using task.Filters;
 
 namespace task
 {
@@ -15,6 +16,11 @@ namespace task
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<CustomExceptionFilter>();
+            });
+
 
             var app = builder.Build();
 

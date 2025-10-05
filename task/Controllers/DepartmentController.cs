@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using task.Data;
 using task.Models;
 using task.ViewModels;
+using task.Filters;
 
 namespace task.Controllers
 {
@@ -30,7 +31,28 @@ namespace task.Controllers
                     InsNames = d.Instructors.Select(i => i.Name).ToList()
                 }).ToList();
 
-            return View(depts); 
+            return View(depts);
         }
+
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [DepartmentLocationFilter]
+        [AddFooterFilter]
+        public IActionResult Add(Department department)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Departments.Add(department);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(GetAll));
+            }
+            return View(department);
+        }
+
     }
 }
