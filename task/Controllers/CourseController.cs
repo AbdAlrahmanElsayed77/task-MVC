@@ -1,39 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using task.Data;
 using task.Models;
-using System.Linq;
+using task.Repositories;
 
 namespace task.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ICourseRepository _courseRepo;
+        private readonly IDepartmentRepository _deptRepo;
 
-        public CourseController(AppDbContext context)
+        public CourseController(ICourseRepository courseRepo, IDepartmentRepository deptRepo)
         {
-            _context = context;
+            _courseRepo = courseRepo;
+            _deptRepo = deptRepo;
         }
 
         public IActionResult Index()
         {
-            var courses = _context.Courses
-           
-                .ToList();
+            var courses = _courseRepo.GetAll();
             return View(courses);
         }
 
         public IActionResult Details(int id)
         {
-            var course = _context.Courses
-       
-                .Include(c => c.Enrollments)
-                    .ThenInclude(e => e.Student)
-                .Include(c => c.Teaches)
-                    .ThenInclude(t => t.Instructor)
-                .FirstOrDefault(c => c.Num == id);
-
+            var course = _courseRepo.GetById(id);
             if (course == null) return NotFound();
             return View(course);
         }
@@ -41,8 +32,8 @@ namespace task.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
-            return View(); 
+            ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name");
+            return View();
         }
 
         [HttpPost]
@@ -52,27 +43,27 @@ namespace task.Controllers
             if (course.MinDegree >= course.Degree)
                 ModelState.AddModelError(nameof(course.MinDegree), "MinDegree must be less than Degree");
 
-            if (_context.Courses.Any(c => c.Name == course.Name))
+            if (_courseRepo.ExistsByName(course.Name))
                 ModelState.AddModelError(nameof(course.Name), "Course name must be unique");
 
             if (ModelState.IsValid)
             {
-                _context.Courses.Add(course);
-                _context.SaveChanges();
+                _courseRepo.Add(course);
+                _courseRepo.Save();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
+            ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name");
             return View(course);
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var course = _context.Courses.Find(id);
+            var course = _courseRepo.GetById(id);
             if (course == null) return NotFound();
 
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
+            ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name");
             return View(course);
         }
 
@@ -83,25 +74,24 @@ namespace task.Controllers
             if (course.MinDegree >= course.Degree)
                 ModelState.AddModelError(nameof(course.MinDegree), "MinDegree must be less than Degree");
 
-            if (_context.Courses.Any(c => c.Name == course.Name && c.Num != course.Num))
+            if (_courseRepo.ExistsByName(course.Name, course.Num))
                 ModelState.AddModelError(nameof(course.Name), "Course name must be unique");
 
             if (ModelState.IsValid)
             {
-                _context.Courses.Update(course);
-                _context.SaveChanges();
+                _courseRepo.Update(course);
+                _courseRepo.Save();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Departments = new SelectList(_context.Departments, "Id", "Name");
+            ViewBag.Departments = new SelectList(_deptRepo.GetAll(), "Id", "Name");
             return View(course);
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var course = _context.Courses
-                .FirstOrDefault(c => c.Num == id);
+            var course = _courseRepo.GetById(id);
             if (course == null) return NotFound();
             return View(course);
         }
@@ -110,10 +100,8 @@ namespace task.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var course = _context.Courses.Find(id);
-            if (course == null) return NotFound();
-            _context.Courses.Remove(course);
-            _context.SaveChanges();
+            _courseRepo.Delete(id);
+            _courseRepo.Save();
             return RedirectToAction(nameof(Index));
         }
     }

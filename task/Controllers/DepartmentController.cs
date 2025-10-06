@@ -1,26 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using task.Data;
 using task.Models;
 using task.ViewModels;
 using task.Filters;
+using task.Repositories;
 
 namespace task.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IDepartmentRepository _deptRepo;
 
-        public DepartmentController(AppDbContext context)
+        public DepartmentController(IDepartmentRepository deptRepo)
         {
-            _context = context;
+            _deptRepo = deptRepo;
         }
 
         public IActionResult GetAll()
         {
-            var depts = _context.Departments
-                .Include(d => d.Students)
-                .Include(d => d.Instructors)
+            var depts = _deptRepo.GetAll()
                 .Select(d => new DepartmentVM
                 {
                     Name = d.Name,
@@ -47,12 +44,11 @@ namespace task.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Departments.Add(department);
-                _context.SaveChanges();
+                _deptRepo.Add(department);
+                _deptRepo.Save();
                 return RedirectToAction(nameof(GetAll));
             }
             return View(department);
         }
-
     }
 }

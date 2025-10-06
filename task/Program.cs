@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using task.Data;
 using task.Filters;
+using task.Repositories;
 
 namespace task
 {
@@ -16,6 +17,15 @@ namespace task
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+
+
+
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<CustomExceptionFilter>();
