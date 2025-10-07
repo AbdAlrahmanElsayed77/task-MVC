@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using task.Models;
-using task.ViewModels;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using task.Filters;
+using task.Models;
 using task.Repositories;
+using task.ViewModels;
 
 namespace task.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _deptRepo;

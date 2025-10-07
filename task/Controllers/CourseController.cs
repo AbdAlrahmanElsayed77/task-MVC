@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using task.Models;
 using task.Repositories;
 
 namespace task.Controllers
 {
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly ICourseRepository _courseRepo;
